@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Aptitude Questions</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f9f9f9;
+      margin: 0;
+      padding: 0;
+    }
+
+    header {
+      background-color: #333;
+      color: white;
+      padding: 20px;
+      text-align: center;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 40px auto;
+      padding: 20px;
+      background-color: white;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+
+    h2 {
+      color: #333;
+      margin-bottom: 20px;
+    }
+
+    .question {
+      background-color: #f0f0f0;
+      padding: 15px;
+      margin-bottom: 15px;
+      border-radius: 6px;
+    }
+
+    .back-btn {
+      margin-top: 20px;
+      padding: 10px 15px;
+      background-color: #2980b9;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .back-btn:hover {
+      background-color: #1f6391;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Aptitude Questions</h1>
+  </header>
+
+  <div class="container">
+    <h2>Practice Set 1</h2>
+
+    <div class="question">
+      <strong>Q1:</strong> A train 100 meters long is running at 60 km/hr. In what time will it pass a man standing on the platform?<br>
+      <em>Options:</em> 5s, 6s, 10s, 12s
+    </div>
+
+    <div class="question">
+      <strong>Q2:</strong> The average of first 50 natural numbers is:<br>
+      <em>Options:</em> 25.5, 25, 26.5, 24.5
+    </div>
+
+    <div class="question">
+      <strong>Q3:</strong> What is the least number which when divided by 6, 7, 8, 9 and 10 leaves remainder 1 in each case?<br>
+      <em>Options:</em> 2519, 2518, 5039, 5038
+    </div>
+
+    <button class="back-btn" onclick="goBack()">← Back to Dashboard</button>
+  </div>
+
+  <script>
+    function goBack() {
+      window.location.href = "dashboard.html";
+    }
+    async function loadQuestions() {
+      const res = await fetch('http://localhost:5000/api/aptitude');
+      const questions = await res.json();
+
+      const container = document.querySelector('.container');
+      questions.forEach(q => {
+        const div = document.createElement('div');
+        div.className = 'question';
+        div.innerHTML = `
+          <strong>Q:</strong> ${q.question}<br>
+          <em>Options:</em> ${q.options.join(', ')}<br><br>
+          <strong>Answer:</strong> ${q.answer}<br>
+          <strong>Explanation:</strong> ${q.explanation}
+        `;
+        container.appendChild(div);
+      });
+    }
+
+    loadQuestions();
+  </script>
+</body>
+</html>

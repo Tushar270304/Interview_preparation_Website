@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>HR Questions</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #fce4ec, #e3f2fd);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    h2 {
+      color: #ad1457;
+      margin-top: 40px;
+      font-size: 2.5rem;
+      text-shadow: 1px 1px 3px rgba(0,0,0,0.2);
+    }
+
+    .container {
+      width: 90%;
+      max-width: 900px;
+      margin: 20px auto;
+      padding: 10px;
+    }
+
+    .card {
+      background: #ffffff;
+      border-radius: 12px;
+      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
+      padding: 20px 25px;
+      margin: 20px 0;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      border-left: 6px solid #c2185b;
+    }
+
+    .card:hover {
+      transform: scale(1.02);
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+    }
+
+    .question-text {
+      font-weight: 600;
+      color: #6a1b9a;
+      font-size: 1.2rem;
+      margin-bottom: 10px;
+    }
+
+    .answer-text {
+      color: #444;
+      font-size: 1rem;
+      line-height: 1.6;
+    }
+      .back-btn {
+      margin-top: 20px;
+      padding: 10px 15px;
+      background-color: #2980b9;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .back-btn:hover {
+      background-color: #1f6391;
+    }
+  </style>
+</head>
+<body>
+
+  <h2>HR Questions</h2>
+  <div class="container" id="questionContainer"></div>
+  <button class="back-btn" onclick="goBack()">← Back to Dashboard</button>
+  
+  <script>
+      function goBack() {
+      window.history.back();
+    }
+    document.addEventListener('DOMContentLoaded', async () => {
+      try {
+        const res = await fetch('http://localhost:5000/api/hr');
+        const data = await res.json();
+
+        if (!Array.isArray(data)) {
+          throw new Error('Invalid data format');
+        }
+
+        const container = document.getElementById('questionContainer');
+        container.innerHTML = '';
+
+        data.forEach(q => {
+          if (!q.question || !q.answer) return;
+
+          const card = document.createElement('div');
+          card.className = 'card';
+
+          card.innerHTML = `
+            <div class="question-text">Q: ${q.question}</div>
+            <div class="answer-text"><strong>Answer:</strong> ${q.answer}</div>
+          `;
+
+          container.appendChild(card);
+        });
+      } catch (err) {
+        console.error('Failed to load HR questions:', err);
+      }
+    });
+  </script>
+
+</body>
+</html>

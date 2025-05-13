@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Resume Tips</title>
+  <style>
+    body {
+      background-color: #f5f5f5;
+      font-family: Arial, sans-serif;
+    }
+    h2 {
+      text-align: center;
+      margin-top: 20px;
+      color: #222;
+    }
+    .container {
+      max-width: 900px;
+      margin: auto;
+      padding: 20px;
+    }
+    .resume-tip {
+      background: white;
+      padding: 20px;
+      margin: 15px 0;
+      border-left: 6px solid #3f51b5;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      transition: 0.3s;
+    }
+    .resume-tip:hover {
+      box-shadow: 0 0 15px rgba(0,0,0,0.2);
+    }
+    .resume-tip strong {
+      display: block;
+      font-size: 1.1em;
+      margin-bottom: 6px;
+      color: #3f51b5;
+    }
+      .back-btn {
+      margin-top: 20px;
+      padding: 10px 15px;
+      background-color: #2980b9;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .back-btn:hover {
+      background-color: #1f6391;
+    }
+  </style>
+</head>
+<body>
+  <h2>Resume Tips</h2>
+  <div class="container" id="resumeTipsContainer"></div>
+  <button class="back-btn" onclick="goBack()">← Back to Dashboard</button>
+
+  <script>
+     function goBack() {
+      window.location.href = "dashboard.html";
+    }
+    document.addEventListener('DOMContentLoaded', async () => {
+      try {
+        const res = await fetch('http://localhost:5000/api/resume');
+        const data = await res.json();
+
+        if (!Array.isArray(data)) throw new Error('Invalid data format');
+
+        const container = document.getElementById('resumeTipsContainer');
+        container.innerHTML = '';
+
+        data.forEach(tip => {
+          const div = document.createElement('div');
+          div.className = 'resume-tip';
+          div.innerHTML = `
+            <strong>Tip:</strong> ${tip.tip}<br>
+            <strong>Explanation:</strong> ${tip.explanation}
+          `;
+          container.appendChild(div);
+        });
+      } catch (err) {
+        console.error('Failed to load resume tips:', err);
+      }
+    });
+  </script>
+</body>
+</html>
